@@ -1,11 +1,10 @@
-import { Schema, model, models } from "mongoose";
-import { ObjectId } from "mongoose";
+import { Document, ObjectId, Schema, model, models } from "mongoose";
 
 export interface IImage extends Document {
     title: string;
     transformationType: string;
     publicId: string;
-    secureUrl: URL;
+    secureUrl: string;
     width?: number;
     height?: number;
     config?: Record<string, unknown>;
@@ -13,7 +12,11 @@ export interface IImage extends Document {
     aspectRatio?: string;
     color?: string;
     prompt?: string;
-    author?: ObjectId;
+    author?: {
+        _id: string;
+        firstname: string;
+        lastname: string;
+    };
     createdAt?: Date;
     updatedAt?: Date;
   }
