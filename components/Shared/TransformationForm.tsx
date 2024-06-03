@@ -49,11 +49,18 @@ function onInputChangeHandler(fieldName: string, value: string, type: string, on
 
 }
 
-const TransformationForm = ({ action, data = null, userId, type, creditBalance }: TransformationFormProps) => {
+function onTransformHandler(){
+
+}
+
+const TransformationForm = ({ action, data = null, userId, type, creditBalance, config = null }: TransformationFormProps) => {
 
     const transformationType = transformationTypes[type];
     const [image, setImage] = useState(data);
     const [newTransformation, setNewTransformation] = useState<Transformations | null>(null)
+    const [isTransforming, setIsTransforming] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [trasformationConfig, setTrasformationConfig] = useState(config);
 
     const initialValues = data && action === "Update" ? {
         title: data?.title,
@@ -139,9 +146,9 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance }
                                 value={field.value}
                                 className="input-field"
                                 onChange={(ev) => onInputChangeHandler(
-                                    'prompt',
+                                    'color',
                                     ev.target.value,
-                                    type,
+                                    'recolor',
                                     field.onChange
                                 )}
                                 />
@@ -150,6 +157,18 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance }
                         )}
                     </div>
                 )}
+               <div className="flex flex-col gap-4">
+               <Button 
+                    className="submit-button capitalize"
+                    disabled={isTransforming || newTransformation === null}
+                    type="button"
+                    onClick={onTransformHandler}>{isTransforming ? 'Transforming...' : 'Apply transformation'}</Button>
+
+                <Button 
+                    className="submit-button capitalize"
+                    disabled={isSubmitting}
+                    type="submit">{isSubmitting ? 'Submitting...' : 'Save Image'}</Button>
+               </div>
             </form>
         </Form>
     )
