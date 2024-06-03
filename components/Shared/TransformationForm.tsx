@@ -22,8 +22,10 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { defaultValues, transformationTypes } from "@/constants";
+import { aspectRatioOptions, defaultValues, transformationTypes } from "@/constants";
 import { CustomField } from "./CustomField";
+import { useState } from "react";
+import { AspectRatioKey } from "@/lib/utils";
 
 export const formSchema = z.object({
     title: z.string(),
@@ -39,9 +41,19 @@ function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
   }
 
+function onSelectFieldHandler(value: string, onChangeField: (value: string) => void){
+
+}
+
+function onInputChangeHandler(fieldName: string, value: string, type: string, onChangeField: (value: string) => void){
+
+}
+
 const TransformationForm = ({ action, data = null, userId, type, creditBalance }: TransformationFormProps) => {
 
     const transformationType = transformationTypes[type];
+    const [image, setImage] = useState(data);
+    const [newTransformation, setNewTransformation] = useState<Transformations | null>(null)
 
     const initialValues = data && action === "Update" ? {
         title: data?.title,
@@ -70,19 +82,73 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance }
 
                 {type === "fill" && (
                     <CustomField
+                    control={form.control}
+                    name="aspectRatio"
+                    formLabel="Aspect Ratio"
+                    className="w-full"
                     render={({ field }) => (
-                        <Select>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Theme" />
+                        <Select
+                        onValueChange={(value) => onSelectFieldHandler(value, field.onChange)}
+                        >
+                        <SelectTrigger className="select-field">
+                            <SelectValue placeholder="Select size" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="light">Light</SelectItem>
-                            <SelectItem value="dark">Dark</SelectItem>
-                            <SelectItem value="system">System</SelectItem>
+                            {Object.keys(aspectRatioOptions).map((key) => (
+                                 <SelectItem key={key} value={key} className="select-item">
+                                    {aspectRatioOptions[key as AspectRatioKey].label}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                         </Select>
 
                     )} />
+                )}
+
+                {(type === "remove" || type === "recolor") && (
+                    <div className="prompt-field">
+                        <CustomField 
+                        control={form.control}
+                        name="prompt"
+                        formLabel={
+                            type === "remove" ?'Object to remove' : 'Object to recolor'
+                        }
+                        className="w-full"
+                        render={(({ field }) => (
+                            <Input 
+                            value={field.value}
+                            className="input-field"
+                            onChange={(ev) => onInputChangeHandler(
+                                'prompt',
+                                ev.target.value,
+                                type,
+                                field.onChange
+                            )}
+                            />
+                        ))}
+                        />
+
+                        {type === 'recolor' && (
+                            <CustomField 
+                            control={form.control}
+                            name="color"
+                            formLabel="Replacement Color"
+                            className="w-full"
+                            render={({ field }) => (
+                                <Input 
+                                value={field.value}
+                                className="input-field"
+                                onChange={(ev) => onInputChangeHandler(
+                                    'prompt',
+                                    ev.target.value,
+                                    type,
+                                    field.onChange
+                                )}
+                                />
+                            )}
+                            />
+                        )}
+                    </div>
                 )}
             </form>
         </Form>
