@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { aspectRatioOptions, defaultValues, transformationTypes } from "@/constants";
+import { aspectRatioOptions, creditFee, defaultValues, transformationTypes } from "@/constants";
 import { CustomField } from "./CustomField";
 import { useState, useTransition } from "react";
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
@@ -90,7 +90,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         }, 1000);
     }
     
-    //TODO: Return to update credits
+    //TODO: Update creditFee to something else
     async function onTransformHandler(){
         setIsTransforming(true);
 
@@ -101,7 +101,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         setNewTransformation(null)
 
         startTransition(async () => {
-            //await updateCredits(userId, creditFee)
+            await updateCredits(userId, -1)
         })
     }
 
