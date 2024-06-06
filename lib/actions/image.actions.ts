@@ -90,3 +90,20 @@ export async function getImageById(imageId: string){
         handleError(error)
     }
 }
+
+//GET IMAGES
+export async function getAllImages({limit = 9, page = 1, searchQuery = ''}: {
+    limit?: number;
+    page: number;
+    searchQuery: string;
+}){
+    try {
+        await connectToDatabase();
+
+        
+
+        return JSON.parse(JSON.stringify(image))
+    } catch(error) {
+        handleError(error)
+    }
+}
