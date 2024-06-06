@@ -2,13 +2,20 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { dataUrl, debounce, download, getImageSize } from '@/lib/utils'
 import Image from 'next/image'
-import { CldImage } from 'next-cloudinary'
+import { CldImage, getCldImageUrl } from 'next-cloudinary'
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props'
 
 const TransformImage = ({ image, type, title, transformationConfig, isTransforming, setIsTransforming, hasDownload = false}: TransformedImageProps) => {
   
-    function downloadHandler(){
+    function downloadHandler(e: React.MouseEvent<HTMLButtonElement, MouseEvent>){
+        e.preventDefault();
 
+        download(getCldImageUrl({
+          width: image?.width,
+          height: image?.height,
+          src: image?.publicId,
+          ...transformationConfig
+        }), title)
     }
 
     return (
