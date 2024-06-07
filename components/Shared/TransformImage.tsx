@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { Button } from '../ui/button'
 import { dataUrl, debounce, download, getImageSize } from '@/lib/utils'
@@ -54,7 +55,7 @@ const TransformImage = ({ image, type, title, transformationConfig, isTransformi
                     onError={() => {
                         debounce(() => {
                             setIsTransforming && setIsTransforming(false)
-                        }, 8000)
+                        }, 8000)()
                     }}
                     {...transformationConfig}
                     />
@@ -67,6 +68,7 @@ const TransformImage = ({ image, type, title, transformationConfig, isTransformi
                             height={50}
                             alt='Transforming'
                             />
+                            <p className="text-white/80">Please wait...</p>
                         </div>
                     )}
             </div>

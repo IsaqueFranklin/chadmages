@@ -78,6 +78,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         src: image?.publicId,
         ...transformationConfig
       })
+      console.log(image?.secureURL)
 
       const imageData = {
         title: values.title,
@@ -85,7 +86,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         transformationType: type,
         width: image?.width,
         height: image?.height,
-        config: transformationConfig,
+        config: image?.secureURL,
         secureURL: transformationUrl,
         transformationURL: transformationUrl,
         aspectRatio: values.aspectRatio,
@@ -93,8 +94,10 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         color: values.color,
       }
 
+      console.log(image?.secureURL)
       if(action === 'Add') {
         try {
+            console.log(image?.secureURL)
           const newImage = await addImage({
             image: imageData,
             userId,
