@@ -1,14 +1,17 @@
 import { Collection } from '@/components/Shared/Collection'
 import { navLinks } from '@/constants'
+import { getAllImages } from '@/lib/actions/image.actions'
 import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-function Home({ searchParams }: SearchParamProps) {
+async function Home({ searchParams }: SearchParamProps) {
 
   const page = Number(searchParams?.page) || 1;
   const searchQuery = (searchParams?.query as string) || '';
+
+  const images = await getAllImages({ page, searchQuery })
 
   return (
     <>
@@ -35,7 +38,12 @@ function Home({ searchParams }: SearchParamProps) {
         </ul>
       </section>
       <section className="sm:mt-12">
-        <Collection />
+        <Collection
+         hasSearch={true}
+         images={images?.data}
+         totalPages={images?.totalPage}
+         page={page}
+         />
       </section>
     </>
   )
